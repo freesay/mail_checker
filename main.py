@@ -114,7 +114,9 @@ def get_path_data(all_data):
         if "Return-Path" in string:
             path_data.append(string)
         if "From" in string.split(':') or 'To:' in string or "CC:" in string:
-            path_data.append(string.split(':')[0] + ': ' + re.findall('\<.+\>', string)[0].strip('<>'))
+            path = re.findall('\<.+\>', string)
+            if path:
+                path_data.append(string.split(':')[0] + ': ' + path[0].strip('<>'))
     print(f'\n\n{"-" * 100}\n\n')
     for path in path_data:
         print(path)
