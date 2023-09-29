@@ -10,14 +10,10 @@ def get_path(path, file):
 
 def get_folder_content():
     root_path = Path(__file__).parents[1]
-    dirs = [Path(root_path, 'resources'), Path(root_path, 'attaches')]
+    target_path = Path(root_path, 'attaches')
     content = []
-    for d in dirs:
-        for file in os.listdir(d):
-            if '.txt' in str(file) or '.html' in str(file):
-                continue
-            else:
-                content.append(file)
+    for el in os.listdir(target_path):
+        content.append(el)
     return content
 
 
@@ -26,7 +22,7 @@ def clear_folders():
     dirs = [Path(root_path, 'resources'), Path(root_path, 'attaches')]
     for d in dirs:
         for file in os.listdir(d):
-            os.remove(Path(d, file))
+            os.remove(Path(d, str(file)))
 
 
 def generate_file_headers(headers_data):
