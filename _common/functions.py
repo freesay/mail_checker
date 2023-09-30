@@ -17,9 +17,12 @@ def _get_data(file):
 
 
 def _create_dirs():
-    root_path = Path(__file__).parents[1]
-    os.mkdir(Path(root_path, 'resources'))
-    os.mkdir(Path(root_path, 'attaches'))
+    try:
+        root_path = Path(__file__).parents[1]
+        os.mkdir(Path(root_path, 'resources'))
+        os.mkdir(Path(root_path, 'attaches'))
+    except:
+        pass
 
 
 class Functions:
