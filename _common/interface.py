@@ -52,6 +52,9 @@ class BuildInterface:
                                        width=50,
                                        text='Show URL\'s',
                                        command=self.func.set_urls_tex_box)
+        self.btn_parse_headers = ttk.Button(self.frame_change_options,
+                                       text='Parse HEADERS',
+                                       command=self.func.set_parse_headers_tex_box)
 
     def init_text_box(self):
         self.text_box = tk.Text(self.frame_text_box, width=1, height=1, wrap='none')
@@ -99,6 +102,7 @@ class BuildInterface:
 
         self.btn_open_file.pack(side='left', padx=5, pady=5)
         self.btn_convert_data.pack(side='left', padx=5, pady=5)
+        self.btn_parse_headers.pack(side='left', fill='x', expand=True, padx=5, pady=5)
         self.btn_get_headers.pack(side='left', padx=5, pady=5)
         self.btn_get_plain.pack(side='left', padx=5, pady=5)
         self.btn_get_html.pack(side='left', padx=5, pady=5)
