@@ -13,12 +13,19 @@ def _get_data(file):
             data = f.read()
         return data
     except:
-        return 'There is no data of this type.'
+        return 'There is no data of this type.\n'
+
+
+def _create_dirs():
+    root_path = Path(__file__).parents[1]
+    os.mkdir(Path(root_path, 'resources'))
+    os.mkdir(Path(root_path, 'attaches'))
 
 
 class Functions:
     def __init__(self, interface):
         self.interface = interface
+        _create_dirs()
 
     def open_file(self):
         self.file = self.interface.file_dialog()
