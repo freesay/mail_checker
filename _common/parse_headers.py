@@ -30,16 +30,25 @@ def return_path_data():
     return_path_text = ''
     for el in _get_data_headers().split('\n'):
         if 'From' == el.split('\t\t\t')[0]:
-            return_path_text += 'From:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+            try:
+                return_path_text += 'From:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+            except:
+                return_path_text += 'From:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
         if 'Return-Path' == el.split('\t\t\t')[0]:
-            return_path_text += 'Return-Path:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
+            try:
+                return_path_text += 'Return-Path:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+            except:
+                return_path_text += 'Return-Path:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
         if 'To' == el.split('\t\t\t')[0]:
             try:
                 return_path_text += 'To:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
             except:
                 return_path_text += 'To:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
         if 'CC' == el.split('\t\t\t')[0]:
-            return_path_text += 'CC:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+            try:
+                return_path_text += 'CC:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+            except:
+                return_path_text += 'CC:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
     return return_path_text + '-'*100 + '\n'
 
 
@@ -95,8 +104,4 @@ def global_result():
           f'{path_data}\n' \
           f'{signatures}\n' \
           f'{spam}\n'
-    # root_path = Path(__file__).parents[1]
-    # file_path = Path(root_path, 'resources', 'parse_headers.txt')
-    # with open(file_path, 'w', encoding='utf-8-sig') as f:
-    #     f.write(res)
     return res
