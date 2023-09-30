@@ -14,8 +14,8 @@ def parse_content(email_data):
     for name, value in email.message_from_string(email_data).items():
         val = ''
         for v in value:
-            val += v.rstrip(';').lstrip('\t').replace('\n', '; ')
-        headers.append(f'{name:30s} {val}')
+            val += v.lstrip('\t').replace('\n', '; ')
+        headers.append(f'{name}\t\t\t{val}')
     gen.generate_file_headers(headers)
     if msg.is_multipart():
         for part in msg.walk():
