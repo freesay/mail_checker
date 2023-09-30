@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from _common import parse_headers
 from _common import parser
 from _common import generators as gen
 
@@ -50,6 +51,10 @@ class Functions:
         data = gen.get_folder_content()
         self.interface.create_files_widget(data)
         self.interface.create_open_html_widget()
+
+    def set_parse_headers_tex_box(self):
+        data = parse_headers.global_result()
+        self.set_data_text_box(data)
 
     def set_headers_tex_box(self):
         location_file = Path('resources', 'res_headers.txt')
