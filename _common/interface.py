@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
+import webbrowser as web
 from _common.functions import Functions
 
 
@@ -20,6 +21,7 @@ class BuildInterface:
         self.frame_combo_btn_1 = ttk.Frame(self.frame_change_file)
         self.frame_combo_btn_2 = ttk.Frame(self.frame_change_options)
         self.frame_combo_btn_3 = ttk.Frame(self.frame_change_options)
+        self.frame_combo_btn_4 = ttk.LabelFrame(self.frame_menu, text='Go to')
         self.frame_detect_res = ttk.LabelFrame(self.frame_menu, text='Attach files')
         self.frame_open_html = ttk.LabelFrame(self.frame_menu, text='Generated html file')
 
@@ -29,32 +31,40 @@ class BuildInterface:
 
     def init_buttons(self):
         self.btn_open_file = ttk.Button(self.frame_combo_btn_1,
-                                        width=50,
+                                        width=40,
                                         text='Open EML',
                                         command=self.func.open_file)
         self.btn_convert_data = ttk.Button(self.frame_combo_btn_1,
-                                           width=50,
+                                           width=40,
                                            text='Processing',
                                            command=self.func.get_convert_data)
         self.btn_get_headers = ttk.Button(self.frame_combo_btn_2,
-                                          width=50,
+                                          width=40,
                                           text='Show HEADERS',
                                           command=self.func.set_headers_tex_box)
         self.btn_get_plain = ttk.Button(self.frame_combo_btn_2,
-                                        width=50,
+                                        width=40,
                                         text='Show PLAIN',
                                         command=self.func.set_plain_tex_box)
         self.btn_get_html = ttk.Button(self.frame_combo_btn_3,
-                                       width=50,
+                                       width=40,
                                        text='Show HTML',
                                        command=self.func.set_html_tex_box)
         self.btn_get_urls = ttk.Button(self.frame_combo_btn_3,
-                                       width=50,
+                                       width=40,
                                        text='Show URL\'s',
                                        command=self.func.set_urls_tex_box)
         self.btn_parse_headers = ttk.Button(self.frame_change_options,
                                        text='Parse HEADERS',
                                        command=self.func.set_parse_headers_tex_box)
+        self.btn_urlscan = ttk.Button(self.frame_combo_btn_4,
+                                       width=40,
+                                       text='URLSCAN',
+                                       command=lambda: web.open('https://urlscan.io/'))
+        self.btn_virustotal = ttk.Button(self.frame_combo_btn_4,
+                                       width=40,
+                                       text='VIRUSTOTAL',
+                                       command=lambda: web.open('https://www.virustotal.com'))
 
     def init_text_box(self):
         self.text_box = tk.Text(self.frame_text_box, width=1, height=1, wrap='none')
@@ -95,6 +105,7 @@ class BuildInterface:
         self.frame_change_options.pack(side='top', fill='y', expand=False, padx=5, pady=5)
         self.frame_detect_res.pack(side='top', fill='x', padx=5, pady=5)
         self.frame_open_html.pack(side='top', fill='x', padx=5, pady=5)
+        self.frame_combo_btn_4.pack(side='bottom')
 
         self.scroll_y.pack(side='right', fill='y')
         self.scroll_x.pack(side='bottom', fill='x')
@@ -107,6 +118,8 @@ class BuildInterface:
         self.btn_get_plain.pack(side='left', padx=5, pady=5)
         self.btn_get_html.pack(side='left', padx=5, pady=5)
         self.btn_get_urls.pack(side='left', padx=5, pady=5)
+        self.btn_urlscan.pack(side='left', padx=5, pady=5)
+        self.btn_virustotal.pack(side='left', padx=5, pady=5)
 
     def run_build(self):
         self.init_frames()
