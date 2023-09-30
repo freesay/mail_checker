@@ -12,7 +12,7 @@ def _get_data_headers():
 
 def received_path_data():
     received_data = []
-    received_text = ''
+    received_text = 'Received hop\n\n'
     for el in _get_data_headers().split('\n'):
         if 'Received' in el:
             received_data.append(el)
@@ -23,11 +23,11 @@ def received_path_data():
                 received_text += f"From:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
             if 'by' in hop:
                 received_text += f"By:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
-    return received_text + '-'*100 + '\n'
+    return received_text + '\n' + '-'*100
 
 
 def return_path_data():
-    return_path_text = ''
+    return_path_text = 'Sender and recipients\n\n'
     for el in _get_data_headers().split('\n'):
         if 'From' == el.split('\t\t\t')[0]:
             try:
@@ -49,12 +49,12 @@ def return_path_data():
                 return_path_text += 'CC:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
             except:
                 return_path_text += 'CC:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
-    return return_path_text + '-'*100 + '\n'
+    return return_path_text + '\n' + '-'*100
 
 
 def signatures_data():
     auth_data = {}
-    auth_text = ''
+    auth_text = 'Authentication info\n\n'
     for el in _get_data_headers().split('\n'):
         if 'authentication' in el.split('\t\t\t')[0].lower():
             auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
@@ -75,12 +75,12 @@ def signatures_data():
             auth_text += '\n'
     else:
         auth_text += 'There is no data on signatures and policies.\n'
-    return auth_text + '-'*100 + '\n'
+    return auth_text + '\n' + '-'*100
 
 
 def spam_data():
     spam_tag = {}
-    spam_tag_text = ''
+    spam_tag_text = 'Spam tags\n\n'
     for el in _get_data_headers().split('\n'):
         if 'spam' in el.split('\t\t\t')[0].lower():
             spam_tag[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
