@@ -12,7 +12,7 @@ def _get_data_headers():
 
 def received_path_data():
     received_data = []
-    received_text = 'Received hop\n\n'
+    received_text = ''
     for el in _get_data_headers().split('\n'):
         if 'Received' in el:
             received_data.append(el)
@@ -23,46 +23,39 @@ def received_path_data():
                 received_text += f"From:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
             if 'by' in hop:
                 received_text += f"By:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
-    return received_text + '\n' + '-'*100
+    return received_text
 
 
 def return_path_data():
-    return_path_text = 'Sender and recipients\n\n'
+    return_path_text = ''
+
+    def _collect_data(word):
+        data = ''
+        try:
+            data += f'{word}:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
+        except Exception as error:
+            print(error)
+            data += f'{word}:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
+        return data
+
     for el in _get_data_headers().split('\n'):
         if 'From' == el.split('\t\t\t')[0]:
-            try:
-                return_path_text += 'From:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
-            except:
-                return_path_text += 'From:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
+            return_path_text += _collect_data('From')
         if 'Return-Path' == el.split('\t\t\t')[0]:
-            try:
-                return_path_text += 'Return-Path:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
-            except:
-                return_path_text += 'Return-Path:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
+            return_path_text += _collect_data('Return-Path')
         if 'To' == el.split('\t\t\t')[0]:
-            try:
-                return_path_text += 'To:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
-            except:
-                return_path_text += 'To:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
+            return_path_text += _collect_data('To')
         if 'CC' == el.split('\t\t\t')[0]:
-            try:
-                return_path_text += 'CC:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
-            except:
-                return_path_text += 'CC:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
-    return return_path_text + '\n' + '-'*100
+            return_path_text += _collect_data('CC')
+    return return_path_text
 
 
 def signatures_data():
     auth_data = {}
-    auth_text = 'Authentication info\n\n'
+    auth_text = ''
     for el in _get_data_headers().split('\n'):
-        if 'authentication' in el.split('\t\t\t')[0].lower():
-            auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
-        if 'dkim' in el.split('\t\t\t')[0].lower():
-            auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
-        if 'spf' in el.split('\t\t\t')[0].lower():
-            auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
-        if 'dmark' in el.split('\t\t\t')[0].lower():
+        string = el.split('\t\t\t')[0].lower()
+        if 'authentication' in string or 'dkim' in string or 'spf' in string or 'dmark' in string:
             auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
     if auth_data:
         for el, val in auth_data.items():
@@ -75,33 +68,35 @@ def signatures_data():
             auth_text += '\n'
     else:
         auth_text += 'There is no data on signatures and policies.\n'
-    return auth_text + '\n' + '-'*100
+    return auth_text
 
 
-def spam_data():
+def x_tags_data():
     spam_tag = {}
-    spam_tag_text = 'Spam tags\n\n'
+    x_tags_text = ''
     for el in _get_data_headers().split('\n'):
-        if 'spam' in el.split('\t\t\t')[0].lower():
+        if 'x-' in el.split('\t\t\t')[0].lower():
             spam_tag[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
     if spam_tag:
         for el, val in spam_tag.items():
-            spam_tag_text += el + ':' + '\n'
+            x_tags_text += el + ':' + '\n'
             for v in val.split(';'):
                 if v == '':
-                    spam_tag_text += '\t\t\t- None \n'
+                    x_tags_text += '\t\t\t- None \n'
                 else:
-                    spam_tag_text += '\t\t\t- ' + v.strip(' ;') + '\n'
-    return spam_tag_text
+                    x_tags_text += '\t\t\t- ' + v.strip(' ;') + '\n'
+    return x_tags_text
 
 
 def global_result():
     received_data = received_path_data()
     path_data = return_path_data()
     signatures = signatures_data()
-    spam = spam_data()
-    res = f'{received_data}\n' \
-          f'{path_data}\n' \
-          f'{signatures}\n' \
-          f'{spam}\n'
+    spam = x_tags_data()
+    split = '-' * 100 + '\n'
+    res = f'{split}' \
+          f'{received_data}{split}' \
+          f'{path_data}{split}' \
+          f'{signatures}{split}' \
+          f'{spam}{split}'
     return res
