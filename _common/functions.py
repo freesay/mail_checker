@@ -12,7 +12,8 @@ def _get_data(file):
         with open(file_path, 'r', encoding='utf-8-sig') as f:
             data = f.read()
         return data
-    except:
+    except Exception as error:
+        print(error)
         return 'There is no data of this type.\n'
 
 
@@ -21,14 +22,15 @@ def _create_dirs():
         root_path = Path(__file__).parents[1]
         os.mkdir(Path(root_path, 'resources'))
         os.mkdir(Path(root_path, 'attaches'))
-    except:
-        pass
+    except Exception as error:
+        print(error)
 
 
 class Functions:
     def __init__(self, interface):
         self.interface = interface
         _create_dirs()
+        gen.clear_folders()
 
     def open_file(self):
         self.file = self.interface.file_dialog()
@@ -44,7 +46,7 @@ class Functions:
     def open_clear_html(self):
         root_path = Path(__file__).parents[1]
         attaches_folder = str(Path(root_path, 'resources', 'clear_html.html'))
-        os.system(fr'{attaches_folder}')
+        os.system(f'{attaches_folder}')
 
     def update_detect_text(self, detect_file):
         self.interface.detect_label.config(text=detect_file)
