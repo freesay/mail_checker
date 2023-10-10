@@ -1,4 +1,5 @@
 import email
+from email.header import decode_header
 from _common import generators as gen
 
 
@@ -36,10 +37,12 @@ def get_content(msg):
         gen.generate_file_html(html)
         gen.generate_file_urls(html)
         gen.generate_clear_html(html)
-    try:
-        if content_type != 'text/plain' or content_type != 'text/html':
+    else:
+        try:
             file_name = msg.get_filename()
+            if decode_header(file_name)[0][1] is not None:
+                file_name = decode_header(file_name)[0][0].decode(decode_header(file_name)[0][1])
             file_data = msg.get_payload(decode=True)
             gen.generate_file_attach(file_name, file_data)
-    except:
-        pass
+        except Exception as error:
+            print(error)
