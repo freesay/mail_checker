@@ -1,3 +1,4 @@
+import base64
 import email
 from email.header import decode_header
 from _common import generators as gen
@@ -7,6 +8,11 @@ def get_raw_data(file):
     with open(file, 'r') as f:
         email_data = f.read()
     return email_data
+
+
+def decode_b64(data):
+    data = base64.b64decode(data)
+    return data
 
 
 def parse_content(email_data):
