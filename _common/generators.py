@@ -19,11 +19,15 @@ def create_dirs():
 
 def get_folder_content():
     root_path = Path(__file__).parents[1]
-    target_path = Path(root_path, 'attaches')
-    content = []
-    for el in os.listdir(target_path):
-        content.append(el)
-    return content
+    attaches_path = Path(root_path, 'attaches')
+    res_path = Path(root_path, 'resources')
+    attaches = []
+    resources = []
+    for el in os.listdir(attaches_path):
+        attaches.append(el)
+    for el in os.listdir(res_path):
+        resources.append(el)
+    return attaches, resources
 
 
 def clear_folders():
