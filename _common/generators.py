@@ -38,14 +38,6 @@ def clear_folders():
             os.remove(Path(d, str(file)))
 
 
-def generate_temp_eml(raw_data):
-    location_file = get_path('resources', 'temp.eml')
-    with open(location_file, 'wb') as f:
-        raw_data_as_byte = raw_data.encode()
-        f.write(raw_data_as_byte)
-    return location_file
-
-
 def generate_file_headers(headers_data):
     location_file = get_path('resources', 'res_headers.txt')
     with open(location_file, 'w', encoding='utf-8-sig') as f:
@@ -53,15 +45,15 @@ def generate_file_headers(headers_data):
             f.writelines(el + '\n')
 
 
-def generate_file_plain(plain_data, charset):
+def generate_file_plain(plain_data):
     location_file = get_path('resources', 'res_plain.txt')
-    with open(location_file, 'w', encoding=charset) as f:
+    with open(location_file, 'w', encoding='utf-8-sig') as f:
         f.write(plain_data)
 
 
-def generate_file_html(html_data, charset):
+def generate_file_html(html_data):
     location_file = get_path('resources', 'res_html.txt')
-    with open(location_file, 'w', encoding=charset) as f:
+    with open(location_file, 'w', encoding='utf-8-sig') as f:
         f.write(html_data)
 
 
@@ -80,10 +72,10 @@ def generate_file_urls(html_data):
                 f.write(el + '\n')
 
 
-def generate_clear_html(html_data, charset):
+def generate_clear_html(html_data):
     location_file = get_path('resources', 'clear_html.html')
     html_data = re.sub('<script.*?>(.*?)</script>', 'SCRIPT_DELETED', html_data, flags=re.DOTALL)
     html_data = re.sub('javascript:.\w+', 'SCRIPT_DELETED', html_data, flags=re.DOTALL)
     html_data = re.sub('https?://[^\s<>\"\']+', 'URL_DELETED', html_data, flags=re.DOTALL)
-    with open(location_file, 'w', encoding=charset) as f:
+    with open(location_file, 'w', encoding='utf-8-sig') as f:
         f.write(html_data)
