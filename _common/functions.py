@@ -9,7 +9,7 @@ def _get_data(file):
     try:
         root_path = Path(__file__).parents[1]
         file_path = Path(root_path, file)
-        with open(file_path, 'rb') as f:
+        with open(file_path, 'r', encoding='utf-8-sig') as f:
             data = f.read()
         return data
     except Exception as error:
@@ -55,9 +55,7 @@ class Functions:
     def get_parse_data(self):
         gen.clear_folders()
         message = self.get_data_text_box()
-        temp_file = gen.generate_temp_eml(message)
-        temp_data = parser.get_raw_data(temp_file)
-        parser.parse_content(temp_data)
+        parser.parse_content(message)
         attaches = gen.get_folder_content()[0]
         resources = gen.get_folder_content()[1]
         self.interface.create_files_widget(attaches)
