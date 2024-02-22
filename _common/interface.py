@@ -102,13 +102,17 @@ class BuildInterface:
             self.detect_label.pack(side='top', fill='x', padx=5, pady=5)
         self.root.update()
 
-    def create_open_html_widget(self):
+    def create_open_html_widget(self, data):
         for widget in self.frame_button_open_html.winfo_children():
             widget.destroy()
-        self.btn_open_html = ttk.Button(self.frame_button_open_html,
-                                        text='Open the cleared EMAIL',
-                                        command=self.func.open_clear_html)
-        self.btn_open_html.pack(side='top', fill='x', padx=5, pady=5)
+        if 'clear_html.html' in data:
+            self.btn_open_html = ttk.Button(self.frame_button_open_html,
+                                            text='Open the cleared EMAIL',
+                                            command=self.func.open_clear_html)
+            self.btn_open_html.pack(side='top', fill='x', padx=5, pady=5)
+        else:
+            self.html_label = ttk.Label(self.frame_button_open_html, text='HTML data not found', wraplength=500)
+            self.html_label.pack(side='top', fill='x', padx=5, pady=5)
         self.root.update()
 
     def packing_widgets(self):
