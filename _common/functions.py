@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
-from _common import parse_headers
 from _common import parser
+from _common import parse_headers
 from _common import generators as gen
 
 
@@ -9,27 +9,18 @@ def _get_data(file):
     try:
         root_path = Path(__file__).parents[1]
         file_path = Path(root_path, file)
-        with open(file_path, 'r', encoding='utf-8-sig') as f:
+        with open(file_path, 'rb') as f:
             data = f.read()
         return data
     except Exception as error:
-        print(error)
+        print('functions, _get_data:', error)
         return 'There is no data of this type.\n'
-
-
-def _create_dirs():
-    try:
-        root_path = Path(__file__).parents[1]
-        os.mkdir(Path(root_path, 'resources'))
-        os.mkdir(Path(root_path, 'attaches'))
-    except Exception as error:
-        print(error)
 
 
 class Functions:
     def __init__(self, interface):
         self.interface = interface
-        _create_dirs()
+        gen.create_dirs()
         gen.clear_folders()
 
     def open_file(self):
@@ -48,24 +39,32 @@ class Functions:
         attaches_folder = str(Path(root_path, 'resources', 'clear_html.html'))
         os.system(f'{attaches_folder}')
 
-    def update_detect_text(self, detect_file):
-        self.interface.detect_label.config(text=detect_file)
+    def get_data_text_box(self):
+        data = self.interface.text_box.get("1.0", 'end-1c')
+        return data
 
     def set_data_text_box(self, data):
-        self.interface.text_box.configure(state='normal')
         self.interface.text_box.delete('1.0', 'end-1c')
         self.interface.text_box.insert('1.0', data)
-        self.interface.text_box.configure(state='disabled')
 
-    def get_convert_data(self):
+    def decode_base64(self):
+        message = self.get_data_text_box()
+        decode_message = parser.decode_b64(message)
+        self.set_data_text_box(decode_message)
+
+    def get_parse_data(self):
         gen.clear_folders()
-        parser.parse_content(self.raw_data)
+        message = self.get_data_text_box()
+        temp_file = gen.generate_temp_eml(message)
+        temp_data = parser.get_raw_data(temp_file)
+        parser.parse_content(temp_data)
         data = gen.get_folder_content()
         self.interface.create_files_widget(data)
         self.interface.create_open_html_widget()
 
     def set_parse_headers_tex_box(self):
-        data = parse_headers.global_result()
+        temp = parse_headers._get_data_headers()
+        data = parse_headers.global_result(str(temp))
         self.set_data_text_box(data)
 
     def set_headers_tex_box(self):
@@ -79,7 +78,7 @@ class Functions:
         self.set_data_text_box(data)
 
     def set_html_tex_box(self):
-        location_file = Path('resources', 'res_html.html')
+        location_file = Path('resources', 'res_html.txt')
         data = _get_data(location_file)
         self.set_data_text_box(data)
 
