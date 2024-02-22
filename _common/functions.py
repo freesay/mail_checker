@@ -84,4 +84,7 @@ class Functions:
     def set_urls_tex_box(self):
         location_file = Path('resources', 'res_urls.txt')
         data = _get_data(location_file)
-        self.set_data_text_box(data)
+        if data:
+            self.set_data_text_box(data)
+        else:
+            self.set_data_text_box('There is no data of this type.\n')
