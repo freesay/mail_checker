@@ -10,7 +10,7 @@ def decode_b64(data):
 
 
 def get_raw_data(email_file):
-    with open(email_file, 'r', errors='ignore') as email_file:
+    with open(email_file, 'r') as email_file:
         message = email_file.read()
     return message
 
@@ -36,12 +36,12 @@ def get_content(msg):
     if content_type == 'text/plain':
         charset = msg.get_content_charset()
         text = msg.get_payload(decode=True).decode(charset, 'ignore')
-        gen.generate_file_plain(text, charset)
+        gen.generate_file_plain(text)
     elif content_type == 'text/html':
         charset = msg.get_content_charset()
         html = msg.get_payload(decode=True).decode(charset, 'ignore')
-        gen.generate_file_html(html, charset)
-        gen.generate_clear_html(html, charset)
+        gen.generate_file_html(html)
+        gen.generate_clear_html(html)
         gen.generate_file_urls(html)
     else:
         try:
