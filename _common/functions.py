@@ -58,9 +58,10 @@ class Functions:
         temp_file = gen.generate_temp_eml(message)
         temp_data = parser.get_raw_data(temp_file)
         parser.parse_content(temp_data)
-        data = gen.get_folder_content()
-        self.interface.create_files_widget(data)
-        self.interface.create_open_html_widget()
+        attaches = gen.get_folder_content()[0]
+        resources = gen.get_folder_content()[1]
+        self.interface.create_files_widget(attaches)
+        self.interface.create_open_html_widget(resources)
 
     def set_parse_headers_tex_box(self):
         temp = parse_headers._get_data_headers()
