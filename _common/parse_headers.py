@@ -1,5 +1,5 @@
-from pathlib import Path
 import re
+from pathlib import Path
 
 
 def _get_data_headers():
@@ -10,10 +10,11 @@ def _get_data_headers():
     return data
 
 
-def received_path_data():
-    received_data = []
+def received_path_data(text_data):
+    temp = text_data.split('\n')
     received_text = ''
-    for el in _get_data_headers().split('\n'):
+    received_data = []
+    for el in temp:
         if 'Received' in el:
             received_data.append(el)
     received_data.reverse()
@@ -26,7 +27,7 @@ def received_path_data():
     return received_text
 
 
-def return_path_data():
+def return_path_data(text_data):
     return_path_text = ''
 
     def _collect_data(word):
@@ -34,11 +35,11 @@ def return_path_data():
         try:
             data += f'{word}:' + '\t\t\t' + re.findall('\<.+\>', el.split('\t\t\t')[1])[0].strip('<>') + '\n'
         except Exception as error:
-            print(error)
+            print('parse_headers, _collect_data:', error)
             data += f'{word}:' + '\t\t\t' + el.split('\t\t\t')[1] + '\n'
         return data
 
-    for el in _get_data_headers().split('\n'):
+    for el in text_data.split('\n'):
         if 'From' == el.split('\t\t\t')[0]:
             return_path_text += _collect_data('From')
         if 'Return-Path' == el.split('\t\t\t')[0]:
@@ -50,10 +51,10 @@ def return_path_data():
     return return_path_text
 
 
-def signatures_data():
+def signatures_data(text_data):
     auth_data = {}
     auth_text = ''
-    for el in _get_data_headers().split('\n'):
+    for el in text_data.split('\n'):
         string = el.split('\t\t\t')[0].lower()
         if 'authentication' in string or 'dkim' in string or 'spf' in string or 'dmark' in string:
             auth_data[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
@@ -71,10 +72,10 @@ def signatures_data():
     return auth_text
 
 
-def x_tags_data():
+def x_tags_data(text_data):
     spam_tag = {}
     x_tags_text = ''
-    for el in _get_data_headers().split('\n'):
+    for el in text_data.split('\n'):
         if 'x-' in el.split('\t\t\t')[0].lower():
             spam_tag[el.split('\t\t\t')[0].strip('\t\t\t')] = el.split('\t\t\t')[1].lstrip('\t\t\t')
     if spam_tag:
@@ -88,11 +89,11 @@ def x_tags_data():
     return x_tags_text
 
 
-def global_result():
-    received_data = received_path_data()
-    path_data = return_path_data()
-    signatures = signatures_data()
-    spam = x_tags_data()
+def global_result(text_data):
+    received_data = received_path_data(text_data)
+    path_data = return_path_data(text_data)
+    signatures = signatures_data(text_data)
+    spam = x_tags_data(text_data)
     split = '-' * 100 + '\n'
     res = f'{split}' \
           f'{received_data}{split}' \
