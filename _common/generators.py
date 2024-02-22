@@ -63,10 +63,10 @@ def generate_file_attach(file_name, file_data):
         f.write(file_data)
 
 
-def generate_file_urls(html_data):
+def generate_file_urls(data):
     location_file = get_path('resources', 'res_urls.txt')
-    with open(location_file, 'w') as f:
-        for string in html_data.split('\n'):
+    with open(location_file, 'a') as f:
+        for string in data.split('\n'):
             res = re.findall('https?://[^\s<>\"\']+', string)
             for el in res:
                 f.write(el + '\n')
