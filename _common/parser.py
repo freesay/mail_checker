@@ -37,6 +37,7 @@ def get_content(msg):
         charset = msg.get_content_charset()
         text = msg.get_payload(decode=True).decode(charset, 'ignore')
         gen.generate_file_plain(text)
+        gen.generate_file_urls(text)
     elif content_type == 'text/html':
         charset = msg.get_content_charset()
         html = msg.get_payload(decode=True).decode(charset, 'ignore')
