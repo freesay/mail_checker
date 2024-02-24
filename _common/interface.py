@@ -116,7 +116,6 @@ class BuildInterface:
         self.check_box_19 = ttk.Checkbutton(self.frame_checklist_message, variable=self.checks[18], text='В сообщении не содержится ссылок на сторонние ресурсы')
         self.check_box_20 = ttk.Checkbutton(self.frame_checklist_message, variable=self.checks[19], text='В сообщении не содержится вложений')
 
-
     def init_text_box(self):
         self.text_box = tk.Text(self.frame_text_box, width=1, height=1, wrap='none')
         self.scroll_y = ttk.Scrollbar(self.frame_text_box, orient='vertical', command=self.text_box.yview)
@@ -133,7 +132,7 @@ class BuildInterface:
             for file in data:
                 self.frame_file = ttk.Frame(self.frame_detect_res)
                 self.frame_file.pack(side='top', fill='x')
-                self.detect_label = ttk.Label(self.frame_file, text=f" - {file}", wraplength=320)
+                self.detect_label = ttk.Label(self.frame_file, text=f" - {file}", wraplength=400)
                 self.detect_label.pack(side='left', fill='x', padx=5, pady=5)
 
                 self.butt_hash_sha256 = ttk.Button(self.frame_file,
