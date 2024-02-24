@@ -1,4 +1,5 @@
 import os
+import hashlib
 from pathlib import Path
 from _common import parser
 from _common import parse_headers
@@ -88,3 +89,11 @@ class Functions:
             self.set_data_text_box(data)
         else:
             self.set_data_text_box('There is no data of this type.\n')
+
+    def check_hash_sha256(self, file):
+        root_path = Path(__file__).parents[1]
+        attaches_path = Path(root_path, 'attaches')
+        file_path = Path(attaches_path, file)
+        hash_sha256 = hashlib.sha256(open(file_path, 'rb').read()).hexdigest()
+        return hash_sha256
+
