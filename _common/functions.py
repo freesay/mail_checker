@@ -1,6 +1,7 @@
 import os
 import hashlib
 from pathlib import Path
+from _common import check_pdf
 from _common import parser
 from _common import parse_headers
 from _common import generators as gen
@@ -96,4 +97,12 @@ class Functions:
         file_path = Path(attaches_path, file)
         hash_sha256 = hashlib.sha256(open(file_path, 'rb').read()).hexdigest()
         return hash_sha256
+
+    def check_pdf_file(self, file):
+        root_path = Path(__file__).parents[1]
+        attaches_path = Path(root_path, 'attaches')
+        file_path = Path(attaches_path, file)
+        res_pdfid = check_pdf.get_report(str(file_path))
+        self.set_data_text_box(res_pdfid)
+        print(res_pdfid)
 
