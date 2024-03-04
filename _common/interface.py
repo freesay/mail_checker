@@ -9,7 +9,7 @@ class BuildInterface:
         self.root = tk.Tk()
         self.root.title('EML checker')
         self.root.geometry('1400x800')
-        self.root.minsize(1400, 800)
+        self.root.minsize(1000, 600)
         self.func = Functions(self)
 
     def init_frames(self):
@@ -127,12 +127,11 @@ class BuildInterface:
         for widget in self.frame_detect_res.winfo_children():
             widget.destroy()
 
-
         if data:
             for file in data:
                 self.frame_file = ttk.Frame(self.frame_detect_res)
                 self.frame_file.pack(side='top', fill='x')
-                self.detect_label = ttk.Label(self.frame_file, text=f" - {file}", wraplength=400)
+                self.detect_label = ttk.Label(self.frame_file, text=f" - {file}", wraplength=320)
                 self.detect_label.pack(side='left', fill='x', padx=5, pady=5)
 
                 self.butt_hash_sha256 = ttk.Button(self.frame_file,
@@ -140,6 +139,13 @@ class BuildInterface:
                                                    command=lambda file_name=self.detect_label.cget('text').lstrip(' - '):
                                                    web.open(f'https://www.virustotal.com/gui/search/{self.func.check_hash_sha256(file_name)}'))
                 self.butt_hash_sha256.pack(side='right', padx=5)
+
+                if file.endswith('.pdf'):
+                    self.butt_check_pdf = ttk.Button(self.frame_file,
+                                                     text=f'Check PDF',
+                                                     command=lambda file_name=self.detect_label.cget('text').lstrip(' - '):
+                                                     self.func.check_pdf_file(file_name))
+                    self.butt_check_pdf.pack(side='right', padx=5)
 
             self.btn_open_folder = ttk.Button(self.frame_detect_res,
                                               text='Open folder',
