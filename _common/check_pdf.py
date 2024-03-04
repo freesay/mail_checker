@@ -1,11 +1,11 @@
-import tst_pdfid
+from utils import pdfid
 
 
 def analyze_pdfs_by_filenames(filenames):
-    options = tst_pdfid.get_fake_options()
+    options = pdfid.get_fake_options()
     options.scan = True
     options.json = True
-    list_of_dict = tst_pdfid.PDFiDMain(filenames, options)
+    list_of_dict = pdfid.PDFiDMain(filenames, options)
     return list_of_dict
 
 
