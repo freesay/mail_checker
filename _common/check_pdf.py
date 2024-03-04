@@ -14,5 +14,6 @@ def get_report(filename):
     res_filenames = analyze_pdfs_by_filenames(filenames)['reports'][0]
     res = ''
     for el, val in res_filenames.items():
-        res += f'{el.ljust(20, "_")} {val}\n'
+        if el.startswith('/'):
+            res += f'\n - {el.ljust(30, "_")} {val}\n'
     return res
