@@ -19,10 +19,16 @@ def received_path_data(text_data):
             received_data.append(el.lstrip('Received'))
     received_data.reverse()
     for el in received_data:
-        for l in el.split(';'):
-            if l and l != '' and l != ' ':
-                received_text += f'{l.strip()}\n'
-        received_text += '\n'
+        if 'from ' in el or 'from;' in el:
+            el = el.replace('from ', '\nFrom: \t')
+            el = el.replace('from;', '\nFrom: \t')
+        if 'by ' in el or 'by;' in el:
+            el = el.replace('by ', '\nBy: \t')
+            el = el.replace('by;', '\nBy: \t')
+        if 'for ' in el or 'for;' in el:
+            el = el.replace('for ', '\nFor: \t')
+            el = el.replace('for;', '\nFor: \t')
+        received_text += f'{el.lstrip()}\n\n'
     return received_text
 
 
