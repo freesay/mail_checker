@@ -18,12 +18,14 @@ def received_path_data(text_data):
         if 'Received' in el:
             received_data.append(el)
     received_data.reverse()
-    for el in received_data[-3:]:
+    for el in received_data[::-1]:
         for hop in el.split('\t\t\t')[1].split(';'):
             if 'from' in hop:
                 received_text += f"From:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
             if 'by' in hop:
                 received_text += f"By:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
+            if 'for' in hop:
+                received_text += f"For:\t\t\t{hop.strip(' ').split(' ')[1]}\n"
     return received_text
 
 
