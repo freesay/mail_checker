@@ -51,7 +51,6 @@ def get_content(msg):
             if decode_header(file_name)[0][1] is not None:
                 file_name = decode_header(file_name)[0][0].decode(decode_header(file_name)[0][1])
             if extension not in file_name:
-                print(extension)
                 file_name = f'{file_name}.{extension}'.rstrip('.octet-stream')
             file_data = msg.get_payload(decode=True)
             gen.generate_file_attach(file_name, file_data)
