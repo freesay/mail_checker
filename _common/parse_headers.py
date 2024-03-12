@@ -18,6 +18,7 @@ def received_path_data(text_data):
         if 'Received' in el:
             received_data.append(el.lstrip('Received'))
     received_data.reverse()
+    day_of_weak = ['Mon,', 'Tue,', 'Wed,', 'Thu,', 'Fri,', 'Sat,', 'Sun,']
     for el in received_data:
         if 'from ' in el or 'from;' in el:
             el = el.replace('from ', '\nFrom: \t')
@@ -28,6 +29,9 @@ def received_path_data(text_data):
         if 'for ' in el or 'for;' in el:
             el = el.replace('for ', '\nFor: \t')
             el = el.replace('for;', '\nFor: \t')
+        for day in day_of_weak:
+            if day in el:
+                el = el.replace(day, f'\n\t{day}')
         received_text += f'{el.lstrip()}\n\n'
     return received_text
 
